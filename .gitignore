@@ -1,3 +1,7 @@
+# Calculated datasets or dictionaries
+*.dataset
+*.dictionary
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
