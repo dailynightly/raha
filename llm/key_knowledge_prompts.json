@@ -1,0 +1,4 @@
+{
+    "knowledge_prompt": "Look at the following data entries: [Entry], [Entry], [Entry]. Now look at the key [Keyname]. How are the values formatted and what kind of semantic and syntactic form do they take?",
+    "entry_examples_needed": 3
+}

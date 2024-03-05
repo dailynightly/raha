@@ -1,0 +1,5 @@
+
+{
+    "correction_prompt": "Use your knowledge which you have just given, to tell me what is incorrect with the following data entry: [Incorrect entry]. Is the problem a syntactic or a semantic one and if one wanted to correct the error, would external knowledge be necessary? Please give a possible correction, if external knowledge is not necessary. Answer by returning the complete corrected entry in the form of 'key1: value1, key2: value2, ..., key: value'",
+    "entry_examples_needed": 3
+}
