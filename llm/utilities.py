@@ -74,7 +74,7 @@ def read_csv_to_dict(file_path):
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            key = row.pop(reader.fieldnames[0])  # Assumes first column is the unique identifier
+            key = row.get(reader.fieldnames[0])  # Assumes first column is the unique identifier
             data[key] = row
     return data
 
