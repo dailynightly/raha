@@ -78,6 +78,10 @@ def read_csv_to_dict(file_path):
             data[key] = row
     return data
 
+# Compare datasets which are clean and dirty and return a dictionary which has the entry column which differ as the key of the dictionary
+# and the dirty entries as the value
+# clean_dataset: dictionary with key being the index and the value being the whole entry
+# dirty_dataset: dictionary with key being the index and the value being the whole entry
 def compare_datasets(clean_dataset, dirty_dataset):
     differences = {}
     for key, dirty_entry in dirty_dataset.items():
