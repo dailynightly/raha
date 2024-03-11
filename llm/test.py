@@ -5,18 +5,20 @@ import os
 
 def generate_knowledge_test_basic():
     model: str = "mistral"
-    key_knowledge_prompts_path = os.getcwd() + "key_knowledge_prompts.json"
+    key_knowledge_prompts_path = os.getcwd() + "/key_knowledge_prompts.json"
     os.chdir("..")
     clean_csv_filepath: str = os.getcwd() + "/datasets/beers/clean.csv"
     dirty_csv_filepath: str = os.getcwd() + "/datasets/beers/dirty.csv"
     clean_entries = utilities.read_csv_to_dict(clean_csv_filepath)
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
     differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
-    incorrect_key = differences.keys()[0]
+    incorrect_key = list(differences.keys())[0]
 
 
     key_knowledge: str = key_knowledge_generator.create_knowledge_generation_prompt(clean_csv_filepath, incorrect_key, key_knowledge_prompts_path)
     print(key_knowledge)
+    llm_response = key_knowledge_generator.ask_llm_for_knowledge(prompt=key_knowledge, model=model)
+    return llm_response
 
 def generate_correction_basic():
     model: str = "mistral"
@@ -45,3 +47,7 @@ These forms are commonly used to represent time in schedules and are easily unde
     incorrect_entry = differences["sched_arr_time"][-1]
 
     correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
+
+if __name__ == "__main__":
+    print(generate_knowledge_test_basic())
+    print(generate_correction_basic())
