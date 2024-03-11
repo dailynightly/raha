@@ -6,7 +6,7 @@ def extract_value_from_prompt(llm_response: str, key: str) -> str:
     pattern = rf"\b{key}\b\s*:\s*([^,]*)"
  
     # Search for the pattern in the text
-    match = re.search(pattern, text)
+    match = re.search(pattern, llm_response)
     
     # If a match is found, return the value
     if match:

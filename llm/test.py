@@ -44,6 +44,7 @@ These forms are commonly used to represent time in schedules and are easily unde
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
     differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
     incorrect_entry = differences["sched_arr_time"][-1]
+    incorrect_entry = utilities.dict_to_string(incorrect_entry)
 
     corrector_prompt = correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
     llm_response = correction_engine.send_correction_prompt(corrector_prompt, model, "sched_arr_time")
