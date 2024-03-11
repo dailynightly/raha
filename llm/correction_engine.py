@@ -23,7 +23,7 @@ def add_incorrect_entry_to_prompt(correction_prompt: str, incorrect_entry: str) 
 
 
 def create_corrector_prompt(incorrect_entry: str, key_knowledge: str):
-    correction_info = utilities.load_prompts("correction_prompts.json")
+    correction_info = utilities.load_prompts("/home/danielle/raha/llm/correction_prompts.json")
     correction_prompt_draft = correction_info["correction_prompt"]
     correction_prompt_final = key_knowledge
     correction_prompt_final += add_incorrect_entry_to_prompt(correction_prompt_draft, incorrect_entry)

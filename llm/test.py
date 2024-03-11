@@ -5,10 +5,9 @@ import os
 
 def generate_knowledge_test_basic():
     model: str = "mistral"
-    key_knowledge_prompts_path = os.getcwd() + "/key_knowledge_prompts.json"
-    os.chdir("..")
-    clean_csv_filepath: str = os.getcwd() + "/datasets/beers/clean.csv"
-    dirty_csv_filepath: str = os.getcwd() + "/datasets/beers/dirty.csv"
+    key_knowledge_prompts_path = "/home/danielle/raha/llm/key_knowledge_prompts.json"
+    clean_csv_filepath: str = "/home/danielle/raha/datasets/beers/clean.csv"
+    dirty_csv_filepath: str = "/home/danielle/raha/datasets/beers/dirty.csv"
     clean_entries = utilities.read_csv_to_dict(clean_csv_filepath)
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
     differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
@@ -39,14 +38,17 @@ In terms of semantic and syntactic forms, these values are structured as follows
 - Syntactic Form: The syntactic form follows a consistent pattern of "hh:mm a.m." or "hh:mm p.m." where "hh" represents the hour (with leading zero if it's a single digit), "mm" represents the minutes, and "a.m." or "p.m." indicates whether it's morning or evening.
 
 These forms are commonly used to represent time in schedules and are easily understandable to people reading the data."""
-    clean_csv_filepath: str = os.getcwd() + "/datasets/flights/clean.csv"
-    dirty_csv_filepath: str = os.getcwd() + "/datasets/flights/dirty.csv"
+    clean_csv_filepath: str = "/home/danielle/raha/datasets/flights/clean.csv"
+    dirty_csv_filepath: str = "/home/danielle/raha/datasets/flights/dirty.csv"
     clean_entries = utilities.read_csv_to_dict(clean_csv_filepath)
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
     differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
     incorrect_entry = differences["sched_arr_time"][-1]
 
-    correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
+    corrector_prompt = correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
+    llm_response = correction_engine.send_correction_prompt(corrector_prompt, model, incorrect_entry)
+
+    return llm_response
 
 if __name__ == "__main__":
     print(generate_knowledge_test_basic())
