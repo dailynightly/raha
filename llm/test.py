@@ -46,10 +46,10 @@ These forms are commonly used to represent time in schedules and are easily unde
     incorrect_entry = differences["sched_arr_time"][-1]
 
     corrector_prompt = correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
-    llm_response = correction_engine.send_correction_prompt(corrector_prompt, model, incorrect_entry)
+    llm_response = correction_engine.send_correction_prompt(corrector_prompt, model, "sched_arr_time")
 
     return llm_response
 
 if __name__ == "__main__":
-    print(generate_knowledge_test_basic())
+    #print(generate_knowledge_test_basic())
     print(generate_correction_basic())
