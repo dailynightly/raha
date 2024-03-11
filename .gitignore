@@ -1,3 +1,5 @@
+#Vscode
+.vscode
 # Calculated datasets or dictionaries
 *.dataset
 *.dictionary
