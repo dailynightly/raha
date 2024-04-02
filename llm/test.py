@@ -10,7 +10,7 @@ def generate_knowledge_test_basic():
     dirty_csv_filepath: str = "/home/danielle/raha/datasets/beers/dirty.csv"
     clean_entries = utilities.read_csv_to_dict(clean_csv_filepath)
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
-    differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
+    differences, key = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
     incorrect_key = list(differences.keys())[0]
 
 
@@ -21,10 +21,8 @@ def generate_knowledge_test_basic():
 
 def generate_correction_basic():
     model: str = "mistral"
-    key_knowledge = """Look at the following data entries: Correct entry: src: aa, flight: AA-1733-ORD-PHX, sched_dep_time: 7:45 p.m., act_dep_time: 7:58 p.m., sched_arr_time: 10:30 p.m., act_arr_time: 10:30 p.m. Correct entry: src: aa, flight: AA-1640-MIA-MCO, sched_dep_time: 6:30 p.m., act_dep_time: 6:30 p.m., sched_arr_time: 7:25 p.m., act_arr_time: 7:25 p.m. Correct entry: src: aa, flight: AA-204-LAX-MCO, sched_dep_time: 11:25 p.m., act_dep_time: 11:25 p.m., sched_arr_time: 6:55 a.m., act_arr_time: 6:55 a.m. Now look at the key sched_arr_time. How are the values formatted and what kind of semantic and syntactic form do they take?
-
-
-The values of the key "sched_arr_time" in the provided data entries are formatted in a specific way. They are in a time format using the 12-hour clock system, with hours and minutes, followed by either "a.m." or "p.m." to indicate whether it's morning or afternoon/evening.
+    key_knowledge_prompt = """Look at the following data entries: Correct entry: src: aa, flight: AA-1733-ORD-PHX, sched_dep_time: 7:45 p.m., act_dep_time: 7:58 p.m., sched_arr_time: 10:30 p.m., act_arr_time: 10:30 p.m. Correct entry: src: aa, flight: AA-1640-MIA-MCO, sched_dep_time: 6:30 p.m., act_dep_time: 6:30 p.m., sched_arr_time: 7:25 p.m., act_arr_time: 7:25 p.m. Correct entry: src: aa, flight: AA-204-LAX-MCO, sched_dep_time: 11:25 p.m., act_dep_time: 11:25 p.m., sched_arr_time: 6:55 a.m., act_arr_time: 6:55 a.m. Now look at the key sched_arr_time. How are the values formatted and what kind of semantic and syntactic form do they take?"""
+    key_knowledge = """The values of the key "sched_arr_time" in the provided data entries are formatted in a specific way. They are in a time format using the 12-hour clock system, with hours and minutes, followed by either "a.m." or "p.m." to indicate whether it's morning or afternoon/evening.
 
 Here's how the values are formatted:
 
@@ -42,11 +40,11 @@ These forms are commonly used to represent time in schedules and are easily unde
     dirty_csv_filepath: str = "/home/danielle/raha/datasets/flights/dirty.csv"
     clean_entries = utilities.read_csv_to_dict(clean_csv_filepath)
     dirty_entries = utilities.read_csv_to_dict(dirty_csv_filepath)
-    differences = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
+    differences, key = utilities.compare_datasets(clean_dataset=clean_entries, dirty_dataset=dirty_entries)
     incorrect_entry = differences["sched_arr_time"][-1]
     incorrect_entry = utilities.dict_to_string(incorrect_entry)
 
-    corrector_prompt = correction_engine.create_corrector_prompt(incorrect_entry, key_knowledge)
+    corrector_prompt = correction_engine.create_corrector_prompt(incorrect_entry,key_knowledge_prompt, key_knowledge)
     llm_response = correction_engine.send_correction_prompt(corrector_prompt, model, "sched_arr_time")
 
     return llm_response

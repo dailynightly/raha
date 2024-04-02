@@ -1,0 +1,5 @@
+{
+    "tuple_prompt" : "Based on your knowledge that you have given on the values of the key [Keyname] and your own internal knowledge, choose from the following 3 entries, which one you think is the easiest to correct if you had to correct it: Number 1: [Entry], Number 2: [Entry], Number 3: [Entry]",
+    "tuples_needed" : 3,
+    "tuples_extraction_prompt" : "From your previous answer, extract out the chosen tuple, by returning it in the following manner: 'I chose tuple number 1.' Use the tuple number you chose, which could be 1, 2 or 3."
+}

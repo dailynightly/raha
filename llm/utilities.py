@@ -3,6 +3,9 @@ import json
 import csv
 
 def csv_to_dict_list(csv_file_path):
+    """Create a dictionary list, meaning that there is a list of dictionary entries, where every element
+    in the list is a database entry in the form of a dictionary""" 
+
     # Initialize an empty list to store the dictionaries
     dict_list = []
 
@@ -18,7 +21,8 @@ def csv_to_dict_list(csv_file_path):
 
     return dict_list
 
-def send_request(prompt: str, model: str, url:str) -> str:
+def send_request(prompt: str, model: str, url:str, template = None) -> str:
+    """Send a prompt request to the llm"""
 
     # JSON object you want to send
     data = {
@@ -26,6 +30,8 @@ def send_request(prompt: str, model: str, url:str) -> str:
     }
     data["model"] = model
     data["prompt"] = prompt
+    if template:
+        data["template"] = template
     # Convert your data to JSON
     json_data = json.dumps(data)
 
@@ -39,7 +45,9 @@ def send_request(prompt: str, model: str, url:str) -> str:
 
             # Access a specific entry in the JSON data
             specific_entry = response_data['response']
+            print("--------------------")
             print(specific_entry)
+            print("....................")
             return specific_entry
 
         except json.JSONDecodeError:
@@ -50,12 +58,12 @@ def send_request(prompt: str, model: str, url:str) -> str:
     
 
 def dict_to_string(input_dict: dict) -> str:
+    """Use this to turn a database entry into string. The database entry needs to be in dict form"""
     # Use a list comprehension to format each key-value pair as 'key : value'
-    pairs = [f"{key} : {value}" for key, value in input_dict.items()]
+    pairs = [f""" "{key}" : "{value}" """ for key, value in input_dict.items()]
 
     # Join all pairs with a comma and a space
-    result = ', '.join(pairs)
-
+    result = r"{" + ', '.join(pairs) + r"}"
     return result
 
 def load_prompts(file_name: str) -> dict:
@@ -70,19 +78,21 @@ def load_prompts(file_name: str) -> dict:
     return data
 
 def read_csv_to_dict(file_path):
+    """create a dictionary which uses the first column as the key and the dict entry as a value"""
+
     data = {}
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             key = row.get(reader.fieldnames[0])  # Assumes first column is the unique identifier
             data[key] = row
-    return data
+    return data, reader.fieldnames[0]
 
-# Compare datasets which are clean and dirty and return a dictionary which has the entry column which differ as the key of the dictionary
-# and the dirty entries as the value
-# clean_dataset: dictionary with key being the index and the value being the whole entry
-# dirty_dataset: dictionary with key being the index and the value being the whole entry
 def compare_datasets(clean_dataset, dirty_dataset):
+    """ Compare datasets which are clean and dirty and return a dictionary which has the entry column which differ as the key of the dictionary
+    and the dirty entries as the value
+    clean_dataset: dictionary with key being the index and the value being the whole entry
+    dirty_dataset: dictionary with key being the index and the value being the whole entry"""
     differences = {}
     for key, dirty_entry in dirty_dataset.items():
         clean_entry = clean_dataset.get(key)
